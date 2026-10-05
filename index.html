@@ -1186,6 +1186,33 @@
         </div>
     </div>
 
+    <!-- Modal for Board Executive Briefing & Whole-Company Sustainability Summary -->
+    <div class="modal-overlay hidden" id="briefingModal">
+        <div class="modal-card briefing-modal-card">
+            <div class="modal-header briefing-modal-header">
+                <div class="modal-title-wrap">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem; flex-wrap: wrap;">
+                        <span class="badge badge-primary"><i data-lucide="award"></i> Board of Directors Executive Briefing</span>
+                        <span class="badge badge-secondary">Whole-Company Sustainability System</span>
+                        <span class="badge badge-success">FY 2021/22 – FY 2025/26 & 2030 Roadmap</span>
+                    </div>
+                    <h3 style="font-size: 1.35rem; font-weight: 700;">ELPITIYA PLANTATIONS PLC</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem;">Single Evidence-Based Sustainability Management System — Executive Board Summary & Benchmark</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <button class="btn btn-primary" id="briefingPrintActionBtn" title="Print or Save as PDF">
+                        <i data-lucide="printer"></i>
+                        <span>Print / Save PDF</span>
+                    </button>
+                    <button class="modal-close-btn" id="briefingModalCloseBtn" title="Close Briefing"><i data-lucide="x"></i></button>
+                </div>
+            </div>
+            <div class="modal-body briefing-modal-body" id="briefingModalBody">
+                <!-- Dynamically populated via app.renderBoardBriefing() -->
+            </div>
+        </div>
+    </div>
+
     <!-- Print Report View (Hidden in normal browser, rendered on Print) -->
     <div id="printReportContainer" class="print-only"></div>
 

@@ -1071,6 +1071,7 @@ const app = {
         this.renderCorrectiveActions();
         this.renderDataDictionary();
         this.renderRecommendations();
+        this.renderBoardBriefing();
         this.initCharts();
         this.setupEventListeners();
         this.setupSimulator();
@@ -1965,6 +1966,9 @@ const app = {
         document.getElementById("actionFormCancelBtn")?.addEventListener("click", () => {
             document.getElementById("actionModal").classList.add("hidden");
         });
+        document.getElementById("briefingModalCloseBtn")?.addEventListener("click", () => {
+            document.getElementById("briefingModal").classList.add("hidden");
+        });
 
         // Close on backdrop click
         document.querySelectorAll(".modal-overlay").forEach(overlay => {
@@ -1994,6 +1998,7 @@ const app = {
             };
             CORRECTIVE_ACTIONS.unshift(newAction);
             this.renderCorrectiveActions();
+            this.renderBoardBriefing();
             document.getElementById("actionModal").classList.add("hidden");
         });
 
@@ -2001,10 +2006,638 @@ const app = {
         document.getElementById("exportDataBtn")?.addEventListener("click", () => this.exportCsv());
         document.getElementById("exportTableCsvBtn")?.addEventListener("click", () => this.exportCsv());
 
-        // Print Report
+        // Board Briefing Modal & Print Actions
         document.getElementById("printReportBtn")?.addEventListener("click", () => {
+            this.renderBoardBriefing();
+            document.getElementById("briefingModal")?.classList.remove("hidden");
+        });
+
+        document.getElementById("briefingPrintActionBtn")?.addEventListener("click", () => {
+            this.renderBoardBriefing();
             window.print();
         });
+
+        // Refresh print container right before native browser print
+        window.addEventListener("beforeprint", () => {
+            this.renderBoardBriefing();
+        });
+    },
+
+    // ------------------------------------------
+    // Render Executive Board Briefing & Company Summary
+    // ------------------------------------------
+    renderBoardBriefing() {
+        const modalBody = document.getElementById("briefingModalBody");
+        const printContainer = document.getElementById("printReportContainer");
+
+        // Helper to format values
+        const fmt = (v, suffix = "") => (v !== null && v !== undefined ? `${v}${suffix}` : '<span class="text-tbe">TBE</span>');
+
+        // 1. ON-SCREEN MODAL CONTENT
+        if (modalBody) {
+            modalBody.innerHTML = `
+                <!-- Strategic Hero Box -->
+                <div class="briefing-hero-box">
+                    <div class="briefing-hero-title">Executive Briefing: Whole-Company Sustainability Performance</div>
+                    <div class="briefing-hero-desc">
+                        <strong>Elpitiya Plantations PLC</strong> manages 13 high-, mid-, and low-country estates spanning over 8,800 hectares in Galle, Pundaluoya, and Pussellawa regions, producing premium Tea, Rubber, Oil Palm, and Specialty Cinnamon. The company is actively driving high-value commercial diversifications in commercial berry cultivation, renewable hydro/solar power generation, and eco-tourism. With a total workforce of <strong>4,563 employees</strong> and supporting <strong>24,989 plantation community residents</strong>, this briefing presents a unified, evidence-based performance summary bridging 5-year historical data (FY21/22–FY25/26) to the 2030 strategic destination.
+                    </div>
+                </div>
+
+                <!-- High-Impact Key Indicators Grid -->
+                <div class="briefing-stats-row">
+                    <div class="briefing-stat-card">
+                        <span class="briefing-stat-label">Total Workforce</span>
+                        <span class="briefing-stat-val">4,563</span>
+                        <span class="briefing-stat-sub text-accent">13 Estates & Factories</span>
+                    </div>
+                    <div class="briefing-stat-card">
+                        <span class="briefing-stat-label">GHG Carbon Footprint</span>
+                        <span class="briefing-stat-val">8,013 <small style="font-size:0.9rem">tCO2e</small></span>
+                        <span class="briefing-stat-sub text-warning"><i data-lucide="alert-circle" style="width:13px;height:13px"></i> +17.5% YoY (CA-01)</span>
+                    </div>
+                    <div class="briefing-stat-card">
+                        <span class="briefing-stat-label">Energy Intensity</span>
+                        <span class="briefing-stat-val">6.39 <small style="font-size:0.9rem">GJ/MT</small></span>
+                        <span class="briefing-stat-sub text-emerald"><i data-lucide="trending-down" style="width:13px;height:13px"></i> -10.9% vs FY23 Base</span>
+                    </div>
+                    <div class="briefing-stat-card">
+                        <span class="briefing-stat-label">Rainwater Reliance</span>
+                        <span class="briefing-stat-val">59.0%</span>
+                        <span class="briefing-stat-sub text-accent">+10pp vs FY22 Base</span>
+                    </div>
+                    <div class="briefing-stat-card">
+                        <span class="briefing-stat-label">Training Hours/Emp</span>
+                        <span class="briefing-stat-val text-emerald">19.0 <small style="font-size:0.9rem">hrs</small></span>
+                        <span class="briefing-stat-sub text-emerald">+1,166% Capability Surge</span>
+                    </div>
+                    <div class="briefing-stat-card">
+                        <span class="briefing-stat-label">OHS Zero Harm</span>
+                        <span class="briefing-stat-val text-emerald">0 Fatalities</span>
+                        <span class="briefing-stat-sub text-emerald">Injuries: 70 (-42.1% YoY)</span>
+                    </div>
+                    <div class="briefing-stat-card">
+                        <span class="briefing-stat-label">Community Welfare</span>
+                        <span class="briefing-stat-val">Rs. 146 <small style="font-size:0.9rem">Mn</small></span>
+                        <span class="briefing-stat-sub text-accent">24,989 Beneficiaries</span>
+                    </div>
+                    <div class="briefing-stat-card">
+                        <span class="briefing-stat-label">Supplier Distribution</span>
+                        <span class="briefing-stat-val">Rs. 3.53 <small style="font-size:0.9rem">Bn</small></span>
+                        <span class="briefing-stat-sub text-emerald">140 Screened (+133%)</span>
+                    </div>
+                </div>
+
+                <!-- Section 1: 7 Core Management Dimensions Summary -->
+                <div class="briefing-section">
+                    <div class="briefing-section-title">
+                        <i data-lucide="layers"></i> 1. Whole-Company Performance Across 7 Core Management Dimensions
+                    </div>
+                    <div class="briefing-dim-grid">
+                        <div class="briefing-dim-box">
+                            <div class="briefing-dim-header">
+                                <span class="briefing-dim-name"><i data-lucide="leaf" class="text-emerald"></i> Environmental & Climate</span>
+                                <span class="dim-status status-moderate">Moderate / Action</span>
+                            </div>
+                            <ul class="briefing-dim-list">
+                                <li><strong>GHG Emissions:</strong> 8,013 tCO2e (-1.7% vs FY22 baseline). FY25/26 rebound (+17.5% YoY) addressed via boiler efficiency and rooftop solar acceleration (CA-01).</li>
+                                <li><strong>Energy Intensity:</strong> 6.39 GJ/MT output, down from 7.17 GJ/MT in FY23 (-10.9%). Deploying VFD smart drives across tea dryer fans (CA-02).</li>
+                                <li><strong>Water Resilience:</strong> 59.0% rainwater reliance (+10pp long term; down from 82% peak). De-silting 6 estate retention reservoirs (CA-03).</li>
+                                <li><strong>Solid Waste:</strong> 333 MT headline waste generated (-94.9% vs FY22 base of 6,561 MT). Transitioning to formal % waste-diversion KPI.</li>
+                            </ul>
+                        </div>
+
+                        <div class="briefing-dim-box">
+                            <div class="briefing-dim-header">
+                                <span class="briefing-dim-name"><i data-lucide="users" class="text-accent"></i> Social & Human Capital</span>
+                                <span class="dim-status status-strong">Strong Capability</span>
+                            </div>
+                            <ul class="briefing-dim-list">
+                                <li><strong>Capability Expansion:</strong> Average training hours reached 19.0 hrs/employee (84,850 total hours; Rs. 19.0 Mn investment), surging +1,166% from 1.5 hrs baseline.</li>
+                                <li><strong>Workforce Retention:</strong> 82.0% in FY25/26 (down 7pp from 89% FY22 base). Introducing estate welfare incentives and child-care upgrades (CA-04).</li>
+                                <li><strong>Gender Diversity:</strong> 49.0% female workforce representation. Establishing separate senior management female leadership metric.</li>
+                                <li><strong>Total Workforce:</strong> 4,563 employees across Up-country, Mid-country, and Low-country estates.</li>
+                            </ul>
+                        </div>
+
+                        <div class="briefing-dim-box">
+                            <div class="briefing-dim-header">
+                                <span class="briefing-dim-name"><i data-lucide="heart-pulse" class="text-danger"></i> Occupational Health & Safety</span>
+                                <span class="dim-status status-priority">Priority Pathway</span>
+                            </div>
+                            <ul class="briefing-dim-list">
+                                <li><strong>Zero Fatalities:</strong> 0 fatalities maintained across all 5 consecutive reporting years (FY22–FY26).</li>
+                                <li><strong>High-Consequence Injuries:</strong> 0 incidents in FY25/26 (eliminated from 1 in FY24/25).</li>
+                                <li><strong>Recordable Injuries:</strong> Decreased by -42.1% from 121 (FY25) to 70 incidents (FY26). Firm target ceiling is &lt;30 incidents (Target T08).</li>
+                                <li><strong>Lost Time Injury Hours:</strong> Dropped by -57.3% from 5,237 hrs to 2,236 lost hours in FY25/26. Enforcing 4 regional PPE safety sessions/year (Target T07).</li>
+                            </ul>
+                        </div>
+
+                        <div class="briefing-dim-box">
+                            <div class="briefing-dim-header">
+                                <span class="briefing-dim-name"><i data-lucide="scale" class="text-tbe"></i> Governance & Sustainable Supply Chain</span>
+                                <span class="dim-status status-tbe">Governance Discipline</span>
+                            </div>
+                            <ul class="briefing-dim-list">
+                                <li><strong>Supplier ESG Screening:</strong> Expanded by +133% from 60 to 140 new suppliers. Transitioning to % ESG audit-compliant scoring (CA-05).</li>
+                                <li><strong>Board Sustainability Oversight:</strong> Formalizing quarterly Board Sustainability Committee reviews with 100% completion target.</li>
+                                <li><strong>Ethics & Whistleblowing:</strong> Establishing formal 30-day SLA resolution register for all substantiated ethics cases.</li>
+                                <li><strong>Data Architecture:</strong> Adopting single corporate master repository with named owners and auditable evidence trails.</li>
+                            </ul>
+                        </div>
+
+                        <div class="briefing-dim-box">
+                            <div class="briefing-dim-header">
+                                <span class="briefing-dim-name"><i data-lucide="handshake" class="text-warning"></i> Stakeholder & Community Welfare</span>
+                                <span class="dim-status status-moderate">Outcome Focus Req.</span>
+                            </div>
+                            <ul class="briefing-dim-list">
+                                <li><strong>Community Investment:</strong> Rs. 146.0 Mn invested in community wellbeing in FY25/26 (cumulative 5-year spend: Rs. 968 Mn).</li>
+                                <li><strong>Direct Reach:</strong> 24,989 plantation community residents supported through healthcare camps, nutritional aid, and child development.</li>
+                                <li><strong>Economic Distribution:</strong> Rs. 3,528 Mn disbursed to local suppliers and tea smallholders.</li>
+                                <li><strong>Strategic Transition:</strong> Shifting from input expenditure to verified quality-of-life outcomes (Zero Hunger targets T01/T02; Elder Care T03/T04; Education T05/T06).</li>
+                            </ul>
+                        </div>
+
+                        <div class="briefing-dim-box">
+                            <div class="briefing-dim-header">
+                                <span class="briefing-dim-name"><i data-lucide="lightbulb" class="text-accent"></i> Financial Resilience & Innovation</span>
+                                <span class="dim-status status-tbe">Strategic Growth</span>
+                            </div>
+                            <ul class="briefing-dim-list">
+                                <li><strong>Commercial Diversification:</strong> Scaling revenue from commercial berry cultivation, specialty teas, and renewable power generation.</li>
+                                <li><strong>Climate-Smart Agriculture:</strong> Advancing vertical farming and hydroponic systems (Target T09) to maximize crop yield per hectare.</li>
+                                <li><strong>Bio-Nutrient Substitution:</strong> Expanding estate compost and bio-fertiliser adoption (Target T10) to reduce synthetic chemical dependency.</li>
+                                <li><strong>Renewable Generation:</strong> Rooftop solar and hydro power offsetting factory grid energy intensity.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: 5-Year Historical Performance Benchmark Table -->
+                <div class="briefing-section">
+                    <div class="briefing-section-title">
+                        <i data-lucide="table"></i> 2. Complete 5-Year Sustainability KPI Historical Performance Master Table
+                    </div>
+                    <div class="briefing-table-container">
+                        <table class="briefing-table">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>KPI Name</th>
+                                    <th>Unit</th>
+                                    <th>FY 2021/22</th>
+                                    <th>FY 2022/23</th>
+                                    <th>FY 2023/24</th>
+                                    <th>FY 2024/25</th>
+                                    <th>FY 2025/26</th>
+                                    <th>5-Yr Change / Direction</th>
+                                    <th>Primary SDG</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${HISTORICAL_KPIS.map(r => `
+                                    <tr>
+                                        <td><strong>${r.category}</strong></td>
+                                        <td>${r.kpi}</td>
+                                        <td><small>${r.unit}</small></td>
+                                        <td>${fmt(r.fy22)}</td>
+                                        <td>${fmt(r.fy23)}</td>
+                                        <td>${fmt(r.fy24)}</td>
+                                        <td>${fmt(r.fy25)}</td>
+                                        <td><strong>${fmt(r.fy26)}</strong></td>
+                                        <td><span class="badge ${r.direction.includes('Lower') || r.direction.includes('Zero') ? 'badge-primary' : 'badge-secondary'}">${r.direction}</span></td>
+                                        <td><span class="sdg-chip"><i data-lucide="globe" style="width:12px;height:12px"></i> ${r.sdg}</span></td>
+                                    </tr>
+                                `).join("")}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Section 3: The 20 Board-Level Sustainability KPIs -->
+                <div class="briefing-section">
+                    <div class="briefing-section-title">
+                        <i data-lucide="gauge"></i> 3. Proposed 20 Board-Level Sustainability Performance KPIs
+                    </div>
+                    <div class="briefing-table-container">
+                        <table class="briefing-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Dimension</th>
+                                    <th>KPI Description</th>
+                                    <th>Unit</th>
+                                    <th>Primary SDG</th>
+                                    <th>Current Baseline (FY25/26)</th>
+                                    <th>Target Direction</th>
+                                    <th>Status</th>
+                                    <th>Executive Owner</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${BOARD_KPIS.map(k => {
+                                    let badgeCls = "badge-success";
+                                    if (k.status === "Attention") badgeCls = "badge-warning";
+                                    if (k.status === "Priority") badgeCls = "badge-danger";
+                                    if (k.status === "Baseline Required") badgeCls = "badge-secondary";
+                                    if (k.status === "Watch") badgeCls = "badge-primary";
+                                    return `
+                                        <tr>
+                                            <td><strong>#${k.id < 10 ? '0' + k.id : k.id}</strong></td>
+                                            <td><small>${k.dimension}</small></td>
+                                            <td><strong>${k.kpi}</strong></td>
+                                            <td><small>${k.unit}</small></td>
+                                            <td><span class="sdg-chip">${k.primarySdg}</span></td>
+                                            <td>${k.currentBaseline}</td>
+                                            <td>${k.targetDirection}</td>
+                                            <td><span class="badge ${badgeCls}">${k.status}</span></td>
+                                            <td><small>${k.owner}</small></td>
+                                        </tr>
+                                    `;
+                                }).join("")}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Section 4: 10 Consultant SDG Targets Register -->
+                <div class="briefing-section">
+                    <div class="briefing-section-title">
+                        <i data-lucide="target"></i> 4. Sustainability Consultant 10 SDG Target Commitments (Horizon: 2026/27 – 2030/31)
+                    </div>
+                    <div class="briefing-table-container">
+                        <table class="briefing-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>SDG Goal</th>
+                                    <th>Strategic Target Commitment</th>
+                                    <th>Timeline</th>
+                                    <th>Target Metric</th>
+                                    <th>Review Cadence</th>
+                                    <th>Executive Owner</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${CONSULTANT_TARGETS.map(t => `
+                                    <tr>
+                                        <td><strong>${t.id}</strong></td>
+                                        <td><span class="sdg-chip">${t.sdg}</span></td>
+                                        <td><strong>${t.target}</strong><br><small style="color:var(--text-muted)">${t.desc}</small></td>
+                                        <td><span class="badge badge-primary">${t.due}</span></td>
+                                        <td>${t.targetVal} ${t.unit}</td>
+                                        <td><small>${t.review}</small></td>
+                                        <td><small>${t.owner}</small></td>
+                                        <td><span class="badge ${t.status === 'In Progress' ? 'badge-success' : 'badge-secondary'}">${t.status}</span></td>
+                                    </tr>
+                                `).join("")}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Section 5: Active PDCA Corrective Action Log -->
+                <div class="briefing-section">
+                    <div class="briefing-section-title">
+                        <i data-lucide="refresh-cw"></i> 5. Active PDCA Closed-Loop Management Action Log
+                    </div>
+                    <div class="briefing-table-container">
+                        <table class="briefing-table">
+                            <thead>
+                                <tr>
+                                    <th>Action ID</th>
+                                    <th>Triggering Variance / Trend</th>
+                                    <th>Investigated Root Cause</th>
+                                    <th>Corrective Action Plan</th>
+                                    <th>Owner</th>
+                                    <th>Budget</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${CORRECTIVE_ACTIONS.map(a => `
+                                    <tr>
+                                        <td><strong>${a.id}</strong></td>
+                                        <td><strong style="color:var(--accent-amber)">${a.trigger}</strong></td>
+                                        <td><small>${a.rootCause}</small></td>
+                                        <td>${a.plan}</td>
+                                        <td><small>${a.owner}</small></td>
+                                        <td><small>${a.budget || 'Within OpEx'}</small></td>
+                                        <td><span class="badge badge-primary">${a.dueDate}</span></td>
+                                        <td><span class="badge ${a.status === 'In Progress' ? 'badge-success' : 'badge-secondary'}">${a.status}</span></td>
+                                    </tr>
+                                `).join("")}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Section 6: Top 10 Strategic Recommendations & 5-Year Horizon -->
+                <div class="briefing-section">
+                    <div class="briefing-section-title">
+                        <i data-lucide="list-checks"></i> 6. Top Strategic Recommendations & 5-Year Phased Implementation Horizon
+                    </div>
+                    <div class="briefing-dim-grid">
+                        ${RECOMMENDATIONS.slice(0, 6).map(r => `
+                            <div class="briefing-dim-box">
+                                <div class="briefing-dim-header">
+                                    <span class="briefing-dim-name"><span class="badge badge-primary">#${r.num}</span> ${r.title}</span>
+                                </div>
+                                <p style="font-size:0.825rem; color:var(--text-secondary); line-height:1.5">${r.body}</p>
+                            </div>
+                        `).join("")}
+                    </div>
+                </div>
+
+                <!-- Governance Sign-off Box -->
+                <div class="briefing-signoff">
+                    <div class="briefing-sign-box">
+                        <div class="briefing-sign-role">Head of Sustainability & Operations</div>
+                        <div>Elpitiya Plantations PLC</div>
+                        <div style="font-size:0.7rem; color:var(--text-muted); margin-top:0.25rem">Evidence & Data Verification</div>
+                    </div>
+                    <div class="briefing-sign-box">
+                        <div class="briefing-sign-role">Chairman, Board Sustainability Committee</div>
+                        <div>Board of Directors Review</div>
+                        <div style="font-size:0.7rem; color:var(--text-muted); margin-top:0.25rem">Oversight & Target Approval</div>
+                    </div>
+                    <div class="briefing-sign-box">
+                        <div class="briefing-sign-role">Managing Director / CEO</div>
+                        <div>Executive Management Approval</div>
+                        <div style="font-size:0.7rem; color:var(--text-muted); margin-top:0.25rem">Resource Allocation & Strategy</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 2. DEDICATED PRINTABLE DOCUMENT (Strictly formatted for A4 PDF Output)
+        if (printContainer) {
+            printContainer.innerHTML = `
+                <div class="print-doc">
+                    <!-- Page 1: Executive Summary & Performance Snapshot -->
+                    <div class="print-header">
+                        <div>
+                            <h1 class="print-brand-title">ELPITIYA PLANTATIONS PLC</h1>
+                            <div class="print-report-title">EXECUTIVE BOARD SUSTAINABILITY BRIEFING & PERFORMANCE REPORT</div>
+                            <div class="print-report-subtitle">Single Evidence-Based Sustainability Management System | FY 2021/22 – FY 2025/26 Benchmark & 2030 Horizon</div>
+                        </div>
+                        <div class="print-meta-col">
+                            <span class="print-badge-tag">BOARD OF DIRECTORS EDITION</span><br>
+                            <strong>Reporting Horizon:</strong> FY 2026/27 – 2030/31<br>
+                            <strong>Master Data:</strong> 5-Year Historical Series<br>
+                            <strong>Generated:</strong> October 2026 / Board Cycle
+                        </div>
+                    </div>
+
+                    <div class="print-summary-box">
+                        <div class="print-summary-title">EXECUTIVE SUMMARY: WHOLE-COMPANY STRATEGIC SUSTAINABILITY PROFILE</div>
+                        <p class="print-summary-p">
+                            <strong>Elpitiya Plantations PLC</strong> (Aitken Spence PLC Group) manages 13 high-, mid-, and low-country estates spanning over 8,800+ hectares across Galle, Pundaluoya, and Pussellawa, producing premium Tea, Rubber, Oil Palm, and Specialty Cinnamon. The company has accelerated commercial diversification into commercial berry cultivation, renewable hydro/solar power generation, and eco-tourism. With a total workforce of <strong>4,563 employees</strong> and supporting <strong>24,989 plantation community residents</strong>, this Board Executive Briefing transitions the company from fragmented reporting into a unified, evidence-based management system connecting 5-year empirical data, 10 UN SDGs, 20 Board KPIs, 10 Consultant Target Commitments, and closed-loop PDCA governance.
+                        </p>
+                    </div>
+
+                    <div class="print-stats-grid">
+                        <div class="print-stat-item">
+                            <div class="print-stat-item-label">Workforce</div>
+                            <div class="print-stat-item-val">4,563</div>
+                            <div class="print-stat-item-sub">13 Estates & Plants</div>
+                        </div>
+                        <div class="print-stat-item">
+                            <div class="print-stat-item-label">GHG Emissions</div>
+                            <div class="print-stat-item-val">8,013 t</div>
+                            <div class="print-stat-item-sub">+17.5% YoY (CA-01)</div>
+                        </div>
+                        <div class="print-stat-item">
+                            <div class="print-stat-item-label">Energy Intensity</div>
+                            <div class="print-stat-item-val">6.39 GJ</div>
+                            <div class="print-stat-item-sub">-10.9% vs FY23 Base</div>
+                        </div>
+                        <div class="print-stat-item">
+                            <div class="print-stat-item-label">Rainwater Share</div>
+                            <div class="print-stat-item-val">59.0%</div>
+                            <div class="print-stat-item-sub">+10pp vs FY22 Base</div>
+                        </div>
+                        <div class="print-stat-item">
+                            <div class="print-stat-item-label">Training / Emp</div>
+                            <div class="print-stat-item-val">19.0 hrs</div>
+                            <div class="print-stat-item-sub">+1,166% Capability</div>
+                        </div>
+                        <div class="print-stat-item">
+                            <div class="print-stat-item-label">Safety Record</div>
+                            <div class="print-stat-item-val">0 Fatalities</div>
+                            <div class="print-stat-item-sub">Injuries: 70 (-42%)</div>
+                        </div>
+                    </div>
+
+                    <div class="print-section">
+                        <div class="print-section-header">1. Whole-Company Performance Across 7 Core Management Dimensions</div>
+                        <div class="print-dim-grid">
+                            <div class="print-dim-card">
+                                <div class="print-dim-title">Environmental & Climate Action</div>
+                                <p class="print-dim-text"><strong>GHG Footprint:</strong> 8,013 tCO2e (-1.7% vs FY22 base). FY26 rebound investigated via rooftop solar & boiler optimizations (CA-01). <strong>Energy Intensity:</strong> 6.39 GJ/MT (-10.9% vs FY23). <strong>Rainwater Reliance:</strong> 59.0% (+10pp long-term; CA-03 de-silting). <strong>Solid Waste:</strong> 333 MT (-94.9% vs FY22 base).</p>
+                            </div>
+                            <div class="print-dim-card">
+                                <div class="print-dim-title">Social & Human Capital Development</div>
+                                <p class="print-dim-text"><strong>Training Surge:</strong> 19.0 hrs/employee (84,850 total hours; Rs. 19 Mn spend), surging +1,166% from 1.5 hrs baseline. <strong>Workforce Retention:</strong> 82.0% (down 7pp vs FY22 base; CA-04 welfare intervention). <strong>Gender Balance:</strong> 49.0% female workforce representation.</p>
+                            </div>
+                            <div class="print-dim-card">
+                                <div class="print-dim-title">Occupational Health & Safety (OHS)</div>
+                                <p class="print-dim-text"><strong>Zero Fatalities:</strong> Maintained 0 fatalities across all 5 reporting years (FY22–FY26). <strong>Recordable Injuries:</strong> Decreased by -42.1% from 121 (FY25) to 70 incidents (Target: &lt;30). <strong>Lost Time Hours:</strong> Dropped by -57.3% from 5,237 to 2,236 hours in FY26.</p>
+                            </div>
+                            <div class="print-dim-card">
+                                <div class="print-dim-title">Governance & Sustainable Supply Chain</div>
+                                <p class="print-dim-text"><strong>Supplier ESG Screening:</strong> 140 new suppliers screened (+133% YoY). Moving to % audit-compliance scoring (CA-05). <strong>Board Reviews:</strong> Formalizing quarterly Board Sustainability review schedule. <strong>Ethics SLA:</strong> 30-day investigation closure SLA register.</p>
+                            </div>
+                            <div class="print-dim-card">
+                                <div class="print-dim-title">Stakeholder & Community Welfare</div>
+                                <p class="print-dim-text"><strong>Community Spend:</strong> Rs. 146.0 Mn invested in community wellbeing (5-year cumulative: Rs. 968 Mn). <strong>Direct Reach:</strong> 24,989 plantation residents supported. <strong>Smallholder Disbursals:</strong> Rs. 3,528 Mn paid to local green-leaf smallholders and vendors.</p>
+                            </div>
+                            <div class="print-dim-card">
+                                <div class="print-dim-title">Financial Resilience & Innovation</div>
+                                <p class="print-dim-text"><strong>Value-Added Expansion:</strong> Commercial berry cultivation, specialty teas, and renewable power. <strong>Climate Agriculture:</strong> Vertical farming and hydroponics (Target T09). <strong>Bio-Fertilisers:</strong> Estate composting and bio-nutrient substitution (Target T10).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="print-page-break"></div>
+
+                    <!-- Page 2: 5-Year Historical Performance Benchmark Master Table -->
+                    <div class="print-section">
+                        <div class="print-section-header">2. 5-Year Historical Sustainability Performance Master Table (FY 2021/22 – FY 2025/26)</div>
+                        <table class="print-table">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>KPI Name</th>
+                                    <th>Unit</th>
+                                    <th>FY21/22</th>
+                                    <th>FY22/23</th>
+                                    <th>FY23/24</th>
+                                    <th>FY24/25</th>
+                                    <th>FY25/26</th>
+                                    <th>Direction</th>
+                                    <th>Primary SDG</th>
+                                    <th>Governance / Data Note</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${HISTORICAL_KPIS.map(r => `
+                                    <tr>
+                                        <td><strong>${r.category}</strong></td>
+                                        <td>${r.kpi}</td>
+                                        <td>${r.unit}</td>
+                                        <td>${r.fy22 !== null ? r.fy22 : 'TBE'}</td>
+                                        <td>${r.fy23 !== null ? r.fy23 : 'TBE'}</td>
+                                        <td>${r.fy24 !== null ? r.fy24 : 'TBE'}</td>
+                                        <td>${r.fy25 !== null ? r.fy25 : 'TBE'}</td>
+                                        <td><strong>${r.fy26 !== null ? r.fy26 : 'TBE'}</strong></td>
+                                        <td><span class="print-badge ${r.direction.includes('Lower') || r.direction.includes('Zero') ? 'print-badge-strong' : 'print-badge-primary'}">${r.direction}</span></td>
+                                        <td><strong>${r.sdg}</strong></td>
+                                        <td><small style="font-size:6.5pt; color:#475569">${r.note || ''}</small></td>
+                                    </tr>
+                                `).join("")}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Page 3: 20 Board-Level Framework KPIs -->
+                    <div class="print-section">
+                        <div class="print-section-header">3. The 20 Board-Level Sustainability Management Framework KPIs</div>
+                        <table class="print-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Dimension</th>
+                                    <th>KPI Description</th>
+                                    <th>Unit</th>
+                                    <th>SDG</th>
+                                    <th>Current Baseline (FY25/26)</th>
+                                    <th>Target Direction</th>
+                                    <th>Status</th>
+                                    <th>Executive Owner</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${BOARD_KPIS.map(k => {
+                                    let badgeCls = "print-badge-strong";
+                                    if (k.status === "Attention") badgeCls = "print-badge-moderate";
+                                    if (k.status === "Priority") badgeCls = "print-badge-priority";
+                                    if (k.status === "Baseline Required") badgeCls = "print-badge-tbe";
+                                    if (k.status === "Watch") badgeCls = "print-badge-watch";
+                                    return `
+                                        <tr>
+                                            <td><strong>#${k.id < 10 ? '0' + k.id : k.id}</strong></td>
+                                            <td>${k.dimension}</td>
+                                            <td><strong>${k.kpi}</strong></td>
+                                            <td>${k.unit}</td>
+                                            <td><strong>${k.primarySdg}</strong></td>
+                                            <td>${k.currentBaseline}</td>
+                                            <td>${k.targetDirection}</td>
+                                            <td><span class="print-badge ${badgeCls}">${k.status}</span></td>
+                                            <td><small style="font-size:6.5pt">${k.owner}</small></td>
+                                        </tr>
+                                    `;
+                                }).join("")}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="print-page-break"></div>
+
+                    <!-- Page 4: 10 Consultant SDG Targets & Active PDCA Corrective Actions -->
+                    <div class="print-section">
+                        <div class="print-section-header">4. Sustainability Consultant 10 SDG Target Register (Milestones: 2026/27 – 2030/31)</div>
+                        <table class="print-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>SDG</th>
+                                    <th>Strategic Target Commitment</th>
+                                    <th>Due</th>
+                                    <th>Target Metric</th>
+                                    <th>Cadence</th>
+                                    <th>Executive Owner</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${CONSULTANT_TARGETS.map(t => `
+                                    <tr>
+                                        <td><strong>${t.id}</strong></td>
+                                        <td><strong>${t.sdg}</strong></td>
+                                        <td><strong>${t.target}</strong></td>
+                                        <td><span class="print-badge print-badge-primary">${t.due}</span></td>
+                                        <td>${t.targetVal} ${t.unit}</td>
+                                        <td>${t.review}</td>
+                                        <td><small style="font-size:6.5pt">${t.owner}</small></td>
+                                        <td><span class="print-badge ${t.status === 'In Progress' ? 'print-badge-strong' : 'print-badge-watch'}">${t.status}</span></td>
+                                    </tr>
+                                `).join("")}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="print-section">
+                        <div class="print-section-header">5. Active PDCA Management Action Log (Root Causes & Interventions)</div>
+                        <table class="print-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Variance Trigger</th>
+                                    <th>Investigated Root Cause</th>
+                                    <th>Corrective Action Plan</th>
+                                    <th>Owner</th>
+                                    <th>Budget</th>
+                                    <th>Target Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${CORRECTIVE_ACTIONS.map(a => `
+                                    <tr>
+                                        <td><strong>${a.id}</strong></td>
+                                        <td><strong style="color:#b45309">${a.trigger}</strong></td>
+                                        <td><small style="font-size:6.5pt">${a.rootCause}</small></td>
+                                        <td>${a.plan}</td>
+                                        <td><small style="font-size:6.5pt">${a.owner}</small></td>
+                                        <td>${a.budget || 'Within OpEx'}</td>
+                                        <td><span class="print-badge print-badge-primary">${a.dueDate}</span></td>
+                                        <td><span class="print-badge ${a.status === 'In Progress' ? 'print-badge-strong' : 'print-badge-watch'}">${a.status}</span></td>
+                                    </tr>
+                                `).join("")}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Sign-off Block -->
+                    <div class="print-sign-row">
+                        <div class="print-sign-card">
+                            <div class="print-sign-name">Head of Sustainability & Operations</div>
+                            <div>Elpitiya Plantations PLC</div>
+                            <div style="color:#64748b; margin-top:2px">Evidence Verified & Maintained</div>
+                        </div>
+                        <div class="print-sign-card">
+                            <div class="print-sign-name">Chairman, Board Sustainability Committee</div>
+                            <div>Board of Directors Review</div>
+                            <div style="color:#64748b; margin-top:2px">Governance Oversight & Targets</div>
+                        </div>
+                        <div class="print-sign-card">
+                            <div class="print-sign-name">Managing Director / CEO</div>
+                            <div>Executive Management Approval</div>
+                            <div style="color:#64748b; margin-top:2px">Strategy & Resource Allocation</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Re-run lucide icons if available
+        if (typeof lucide !== 'undefined' && lucide.createIcons) {
+            lucide.createIcons();
+        }
     },
 
     // ------------------------------------------
