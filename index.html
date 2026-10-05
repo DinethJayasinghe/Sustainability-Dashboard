@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elpitiya Plantations PLC - Sustainability Management Dashboard</title>
+    <meta name="description" content="Executive Board Sustainability Performance Measurement Dashboard for Elpitiya Plantations PLC (FY 2021/22 - FY 2025/26 & 2030/31 Targets)">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-dark">
+    <!-- Top Navigation Bar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="brand-group">
+                <div class="brand-logo">
+                    <div class="logo-icon-wrap">
+                        <i data-lucide="sprout" class="logo-icon"></i>
+                    </div>
+                    <div class="brand-text">
+                        <div class="brand-title">ELPITIYA PLANTATIONS PLC</div>
+                        <div class="brand-subtitle">Sustainability Performance Management Framework</div>
+                    </div>
+                </div>
+                <div class="badge-tag">
+                    <span class="pulse-dot"></span>
+                    <span>Board of Directors Edition</span>
+                </div>
+            </div>
+
+            <div class="nav-controls">
+                <div class="horizon-badge">
+                    <i data-lucide="compass" class="nav-mini-icon"></i>
+                    <span>Horizon: <strong>FY 2026/27 – 2030/31</strong></span>
+                </div>
+                
+                <div class="search-box">
+                    <i data-lucide="search" class="search-icon"></i>
+                    <input type="text" id="globalSearch" placeholder="Search KPIs, SDGs, owners, metrics...">
+                </div>
+
+                <button class="btn btn-icon" id="themeToggle" title="Toggle Light/Dark Theme">
+                    <i data-lucide="sun" id="themeIcon"></i>
+                </button>
+
+                <button class="btn btn-outline" id="exportDataBtn" title="Export Dataset to CSV">
+                    <i data-lucide="download"></i>
+                    <span>Export CSV</span>
+                </button>
+
+                <button class="btn btn-primary" id="printReportBtn" title="Print Board Executive Briefing">
+                    <i data-lucide="printer"></i>
+                    <span>Board Briefing</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Sub-Navigation Navigation Tabs -->
+        <nav class="sub-nav">
+            <div class="tab-list" role="tablist">
+                <button class="tab-btn active" data-tab="tab-overview">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Executive Overview</span>
+                </button>
+                <button class="tab-btn" data-tab="tab-board-kpis">
+                    <i data-lucide="gauge"></i>
+                    <span>20 Board KPIs</span>
+                    <span class="tab-counter">20</span>
+                </button>
+                <button class="tab-btn" data-tab="tab-analytics">
+                    <i data-lucide="trending-up"></i>
+                    <span>5-Year Trends & Charts</span>
+                </button>
+                <button class="tab-btn" data-tab="tab-sdg-targets">
+                    <i data-lucide="target"></i>
+                    <span>Consultant SDG Targets</span>
+                    <span class="tab-counter">10</span>
+                </button>
+                <button class="tab-btn" data-tab="tab-sdg-matrix">
+                    <i data-lucide="globe-2"></i>
+                    <span>SDG Alignment Matrix</span>
+                </button>
+                <button class="tab-btn" data-tab="tab-pdca">
+                    <i data-lucide="refresh-cw"></i>
+                    <span>PDCA & Action Log</span>
+                    <span class="tab-alert-badge" id="openActionsCount">5</span>
+                </button>
+                <button class="tab-btn" data-tab="tab-governance">
+                    <i data-lucide="shield-check"></i>
+                    <span>Data Governance & Dictionary</span>
+                </button>
+                <button class="tab-btn" data-tab="tab-roadmap">
+                    <i data-lucide="milestone"></i>
+                    <span>5-Year Roadmap</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-content">
+        <!-- ==================== TAB 1: EXECUTIVE OVERVIEW ==================== -->
+        <section id="tab-overview" class="tab-content active">
+            <!-- Strategic Alert Banner -->
+            <div class="executive-banner">
+                <div class="banner-left">
+                    <div class="banner-tag">Strategic Direction</div>
+                    <h2>Moving from <span class="text-accent-dim">"Sustainability Data & Activities"</span> to <span class="text-emerald">"A Single Evidence-Based Sustainability System"</span></h2>
+                    <p>Connecting 5-Year Historical Performance (FY21/22 - FY25/26), UN Sustainable Development Goals, 20 Board KPIs, 10 Consultant Target Milestones, KPI Ownership & Closed-Loop Corrective Actions.</p>
+                </div>
+                <div class="banner-meta">
+                    <div class="meta-item">
+                        <span class="label">Course</span>
+                        <span class="value">Ethics in Business & Sustainability</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="label">Role</span>
+                        <span class="value">Sustainability Consultants</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="label">Primary Base</span>
+                        <span class="value">EPP 5-Year Workbook Data</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Level Scorecards (7 Core Dimensions) -->
+            <div class="section-header">
+                <div>
+                    <h3 class="section-title">Core Management Dimensions Scorecard</h3>
+                    <p class="section-subtitle">High-level sustainability health across Environmental, Social, Governance, Financial, Innovation, Ethics & Stakeholder Engagement</p>
+                </div>
+                <div class="quick-status-legend">
+                    <span class="legend-item"><span class="dot dot-strong"></span> Strong (4)</span>
+                    <span class="legend-item"><span class="dot dot-moderate"></span> Moderate (6)</span>
+                    <span class="legend-item"><span class="dot dot-priority"></span> Priority Action (4)</span>
+                    <span class="legend-item"><span class="dot dot-tbe"></span> Baseline Required / TBE (6)</span>
+                </div>
+            </div>
+
+            <div class="dimensions-grid">
+                <!-- 1. Environmental -->
+                <div class="dimension-card dim-environmental" onclick="app.filterByDimension('Environmental')">
+                    <div class="dim-card-header">
+                        <div class="dim-icon-wrapper env">
+                            <i data-lucide="leaf"></i>
+                        </div>
+                        <div class="dim-status status-moderate">Moderate - Attention</div>
+                    </div>
+                    <h4 class="dim-title">Environmental & Climate</h4>
+                    <p class="dim-desc">GHG Emissions, Energy, Rainwater, Solid Waste, Land Use & Agroforestry</p>
+                    <div class="dim-metrics">
+                        <div class="metric-row">
+                            <span class="metric-label">GHG Emissions:</span>
+                            <span class="metric-val">8,013 <small>tCO2e</small> <span class="sub-change text-warning"><i data-lucide="trending-up"></i> +17.5% vs FY25</span></span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Energy Intensity:</span>
+                            <span class="metric-val">6.39 <small>GJ/MT</small> <span class="sub-change text-emerald"><i data-lucide="trending-down"></i> -10.9% vs base</span></span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Rainwater Reliance:</span>
+                            <span class="metric-val">59.0% <span class="sub-change text-warning"><i data-lucide="arrow-down-right"></i> -23pp vs peak</span></span>
+                        </div>
+                    </div>
+                    <div class="dim-footer">
+                        <span>8 Board KPIs</span>
+                        <i data-lucide="chevron-right"></i>
+                    </div>
+                </div>
+
+                <!-- 2. Social & People -->
+                <div class="dimension-card dim-social" onclick="app.filterByDimension('Social')">
+                    <div class="dim-card-header">
+                        <div class="dim-icon-wrapper soc">
+                            <i data-lucide="users"></i>
+                        </div>
+                        <div class="dim-status status-strong">Strong Capability</div>
+                    </div>
+                    <h4 class="dim-title">Social & Human Capital</h4>
+                    <p class="dim-desc">Capability Building, Training, Retention, Inclusion & Gender Balance</p>
+                    <div class="dim-metrics">
+                        <div class="metric-row">
+                            <span class="metric-label">Avg Training Hours:</span>
+                            <span class="metric-val text-emerald">19.0 <small>hrs/emp</small> <span class="sub-change text-emerald">+1,166%</span></span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Total Workforce:</span>
+                            <span class="metric-val">4,563 <small>employees</small></span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Retention Rate:</span>
+                            <span class="metric-val">82.0% <span class="sub-change text-warning">-7pp vs base</span></span>
+                        </div>
+                    </div>
+                    <div class="dim-footer">
+                        <span>7 Board KPIs</span>
+                        <i data-lucide="chevron-right"></i>
+                    </div>
+                </div>
+
+                <!-- 3. Health & Safety -->
+                <div class="dimension-card dim-safety" onclick="app.filterByDimension('Social')">
+                    <div class="dim-card-header">
+                        <div class="dim-icon-wrapper safe">
+                            <i data-lucide="heart-pulse"></i>
+                        </div>
+                        <div class="dim-status status-priority">Priority Pathway</div>
+                    </div>
+                    <h4 class="dim-title">Occupational Health & Safety</h4>
+                    <p class="dim-desc">Zero-Harm Pathway, Injury Reduction, Lost Hours & Regional PPE Sessions</p>
+                    <div class="dim-metrics">
+                        <div class="metric-row">
+                            <span class="metric-label">Recordable Injuries:</span>
+                            <span class="metric-val text-emerald">70 <small>incidents</small> <span class="sub-change text-emerald">-42.1% YoY</span></span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Lost Hours:</span>
+                            <span class="metric-val text-emerald">2,236 <small>hrs</small> <span class="sub-change text-emerald">-57.3% YoY</span></span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Target Ceiling:</span>
+                            <span class="metric-val text-accent">&lt; 30 <small>incidents</small></span>
+                        </div>
+                    </div>
+                    <div class="dim-footer">
+                        <span>Zero Fatalities (5-Yr)</span>
+                        <i data-lucide="chevron-right"></i>
+                    </div>
+                </div>
+
+                <!-- 4. Governance & Ethics -->
+                <div class="dimension-card dim-governance" onclick="app.filterByDimension('Governance')">
+                    <div class="dim-card-header">
+                        <div class="dim-icon-wrapper gov">
+                            <i data-lucide="scale"></i>
+                        </div>
+                        <div class="dim-status status-tbe">Developing Discipline</div>
+                    </div>
+                    <h4 class="dim-title">Governance & Ethics</h4>
+                    <p class="dim-desc">Board Sustainability Reviews, Ethics Case SLA & Compliance Oversight</p>
+                    <div class="dim-metrics">
+                        <div class="metric-row">
+                            <span class="metric-label">Supplier ESG Screened:</span>
+                            <span class="metric-val">140 <small>suppliers</small> <span class="sub-change text-emerald">+133% YoY</span></span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Board Reviews:</span>
+                            <span class="metric-val text-tbe">TBE <small>Schedule</small></span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Ethics Closure SLA:</span>
+                            <span class="metric-val text-tbe">TBE <small>Register</small></span>
+                        </div>
+                    </div>
+                    <div class="dim-footer">
+                        <span>3 Board KPIs</span>
+                        <i data-lucide="chevron-right"></i>
+                    </div>
+                </div>
+
+                <!-- 5. Stakeholder Engagement -->
+                <div class="dimension-card dim-stakeholder" onclick="app.filterByDimension('Stakeholder')">
+                    <div class="dim-card-header">
+                        <div class="dim-icon-wrapper stk">
+                            <i data-lucide="handshake"></i>
+                        </div>
+                        <div class="dim-status status-moderate">Outcome Focus Req.</div>
+                    </div>
+                    <h4 class="dim-title">Stakeholder & Community</h4>
+                    <p class="dim-desc">Community Investment, Zero Hunger Initiatives, Beneficiaries & Suppliers</p>
+                    <div class="dim-metrics">
+                        <div class="metric-row">
+                            <span class="metric-label">Community Spending:</span>
+                            <span class="metric-val">Rs. 146 <small>Mn</small></span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Beneficiaries Reached:</span>
+                            <span class="metric-val">24,989 <small>people</small></span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Supplier Payments:</span>
+                            <span class="metric-val">Rs. 3,528 <small>Mn</small></span>
+                        </div>
+                    </div>
+                    <div class="dim-footer">
+                        <span>1 Board KPI + 4 Targets</span>
+                        <i data-lucide="chevron-right"></i>
+                    </div>
+                </div>
+
+                <!-- 6. Financial & Innovation -->
+                <div class="dimension-card dim-innovation" onclick="app.filterByDimension('Financial / Innovation')">
+                    <div class="dim-card-header">
+                        <div class="dim-icon-wrapper inn">
+                            <i data-lucide="lightbulb"></i>
+                        </div>
+                        <div class="dim-status status-tbe">New Strategic Area</div>
+                    </div>
+                    <h4 class="dim-title">Financial & Innovation</h4>
+                    <p class="dim-desc">Value-Added Revenue Share, Hydroponics/Vertical Farming & Bio-Fertiliser</p>
+                    <div class="dim-metrics">
+                        <div class="metric-row">
+                            <span class="metric-label">Value-Added Share:</span>
+                            <span class="metric-val text-tbe">TBE <small>Revenue %</small></span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Hydroponics / Vertical:</span>
+                            <span class="metric-val text-accent">Target T09 <small>SDG 12</small></span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Bio-Fertiliser Adoption:</span>
+                            <span class="metric-val text-accent">Target T10 <small>SDG 12</small></span>
+                        </div>
+                    </div>
+                    <div class="dim-footer">
+                        <span>1 Board KPI + 2 Targets</span>
+                        <i data-lucide="chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Executive Key Findings & The 5 Transition Highlights -->
+            <div class="overview-highlights-row">
+                <!-- Journey Dashboard Highlights -->
+                <div class="card highlight-card">
+                    <div class="card-header">
+                        <div>
+                            <h4 class="card-title"><i data-lucide="milestone"></i> Executive Journey Bridge</h4>
+                            <p class="card-subtitle">Key indicators connecting historical baseline to future strategic destination</p>
+                        </div>
+                        <span class="badge badge-primary">Section 2.2</span>
+                    </div>
+                    <div class="journey-table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Indicator</th>
+                                    <th>Where We Were</th>
+                                    <th>Where We Are (FY25/26)</th>
+                                    <th>Destination / Target</th>
+                                    <th>Management Reading</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>GHG Emissions</strong></td>
+                                    <td>8,151 tCO2e</td>
+                                    <td><span class="badge badge-warning">8,013 tCO2e</span></td>
+                                    <td>Reduce Further</td>
+                                    <td><small>Slightly below FY22, but FY26 reversed FY25 low (6,817 tCO2e). Scope 1+2 intensity required.</small></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Energy Intensity</strong></td>
+                                    <td>7.17 GJ/MT (FY23)</td>
+                                    <td>6.39 GJ/MT</td>
+                                    <td>Lower</td>
+                                    <td><small>Improved vs earliest comparable base, but worsened from 5.65 low in FY25.</small></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Rainwater Reliance</strong></td>
+                                    <td>49%</td>
+                                    <td>59%</td>
+                                    <td>Increase &gt; 80%</td>
+                                    <td><small>Up +10pp long term, but fell significantly from 82% peak in FY25. Investigate causes.</small></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Training Hours / Emp</strong></td>
+                                    <td>1.5 hrs</td>
+                                    <td><span class="badge badge-success">19.0 hrs</span></td>
+                                    <td>Link to Outcomes</td>
+                                    <td><small>Massive capability expansion (84,850 total hrs). Now link to productivity & progression.</small></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Recordable Injuries</strong></td>
+                                    <td>121 (FY25)</td>
+                                    <td><span class="badge badge-success">70 incidents</span></td>
+                                    <td><strong class="text-emerald">&lt; 30 incidents</strong></td>
+                                    <td><small>Clearest quantified pathway: -42% reduction. Target ceiling is &lt;30 incidents.</small></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Strategic Transition Shift -->
+                <div class="card shift-card">
+                    <div class="card-header">
+                        <div>
+                            <h4 class="card-title"><i data-lucide="arrow-right-left"></i> The Activity-to-Outcome Transition</h4>
+                            <p class="card-subtitle">Consultant core recommendations for Board decision-usefulness</p>
+                        </div>
+                        <span class="badge badge-secondary">Section 7</span>
+                    </div>
+                    <div class="transition-list">
+                        <div class="trans-item">
+                            <div class="trans-from">
+                                <span class="trans-label">Traditional Metric</span>
+                                <strong>Community Investment (Rs. 146 Mn)</strong>
+                                <small>Input measure</small>
+                            </div>
+                            <div class="trans-arrow"><i data-lucide="arrow-right"></i></div>
+                            <div class="trans-to">
+                                <span class="trans-label">Decision-Useful Outcome</span>
+                                <strong>Measured Improvement in Community Condition</strong>
+                                <small>Food security & living standards</small>
+                            </div>
+                        </div>
+
+                        <div class="trans-item">
+                            <div class="trans-from">
+                                <span class="trans-label">Traditional Metric</span>
+                                <strong>New Suppliers Screened (140)</strong>
+                                <small>Activity count</small>
+                            </div>
+                            <div class="trans-arrow"><i data-lucide="arrow-right"></i></div>
+                            <div class="trans-to">
+                                <span class="trans-label">Decision-Useful Outcome</span>
+                                <strong>% Suppliers Screened & ESG Compliant</strong>
+                                <small>With corrective action SLA</small>
+                            </div>
+                        </div>
+
+                        <div class="trans-item">
+                            <div class="trans-from">
+                                <span class="trans-label">Traditional Metric</span>
+                                <strong>Solid Waste Generated (333 MT)</strong>
+                                <small>Output / burden tonnage</small>
+                            </div>
+                            <div class="trans-arrow"><i data-lucide="arrow-right"></i></div>
+                            <div class="trans-to">
+                                <span class="trans-label">Decision-Useful Outcome</span>
+                                <strong>% Waste Diverted from Disposal</strong>
+                                <small>Circular economy & composting</small>
+                            </div>
+                        </div>
+
+                        <div class="trans-item">
+                            <div class="trans-from">
+                                <span class="trans-label">Traditional Metric</span>
+                                <strong>Overall Female Representation (49%)</strong>
+                                <small>Workforce baseline</small>
+                            </div>
+                            <div class="trans-arrow"><i data-lucide="arrow-right"></i></div>
+                            <div class="trans-to">
+                                <span class="trans-label">Decision-Useful Outcome</span>
+                                <strong>Female Representation in Senior Management</strong>
+                                <small>Inclusion & leadership equity</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Action Shortcuts -->
+            <div class="overview-quick-links">
+                <div class="quick-link-card" onclick="app.switchTab('tab-board-kpis')">
+                    <i data-lucide="sliders-horizontal"></i>
+                    <div>
+                        <strong>Explore 20 Board KPIs</strong>
+                        <span>Filter by dimension, SDG, and executive owner</span>
+                    </div>
+                </div>
+                <div class="quick-link-card" onclick="app.switchTab('tab-analytics')">
+                    <i data-lucide="line-chart"></i>
+                    <div>
+                        <strong>Interactive Trend Visualizer</strong>
+                        <span>Compare multi-year historical trajectories</span>
+                    </div>
+                </div>
+                <div class="quick-link-card" onclick="app.switchTab('tab-sdg-targets')">
+                    <i data-lucide="flag"></i>
+                    <div>
+                        <strong>10 Consultant Target Register</strong>
+                        <span>Track dated milestones & ongoing programmes</span>
+                    </div>
+                </div>
+                <div class="quick-link-card" onclick="app.switchTab('tab-pdca')">
+                    <i data-lucide="clipboard-edit"></i>
+                    <div>
+                        <strong>Management Action Tracker</strong>
+                        <span>Investigate variances & assign corrective root causes</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 2: 20 BOARD KPIs ==================== -->
+        <section id="tab-board-kpis" class="tab-content">
+            <div class="section-header">
+                <div>
+                    <h3 class="section-title">20 Proposed Board-Level Sustainability KPIs</h3>
+                    <p class="section-subtitle">Retained from the consultant framework with baseline evidence, SDG mapping, target directions and named executive owners</p>
+                </div>
+                <div class="filter-toolbar">
+                    <div class="filter-group">
+                        <label for="kpiDimensionFilter"><i data-lucide="filter"></i> Dimension:</label>
+                        <select id="kpiDimensionFilter">
+                            <option value="ALL">All Dimensions (7)</option>
+                            <option value="Environmental">Environmental (8)</option>
+                            <option value="Social">Social & OHS (7)</option>
+                            <option value="Governance">Governance (2)</option>
+                            <option value="Governance / Ethics">Governance & Ethics (1)</option>
+                            <option value="Governance / Supply Chain">Governance / Supply Chain (1)</option>
+                            <option value="Financial / Innovation">Financial / Innovation (1)</option>
+                            <option value="Stakeholder">Stakeholder (1)</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="kpiStatusFilter">Status:</label>
+                        <select id="kpiStatusFilter">
+                            <option value="ALL">All Statuses</option>
+                            <option value="Positive">Positive Trend</option>
+                            <option value="Watch">Watch / Stable</option>
+                            <option value="Attention">Attention Needed</option>
+                            <option value="Priority">Priority Action</option>
+                            <option value="Baseline Required">Baseline Required (TBE)</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="kpiOwnerFilter">Executive Owner:</label>
+                        <select id="kpiOwnerFilter">
+                            <option value="ALL">All Owners</option>
+                            <option value="Head of Sustainability + Operations">Head of Sustainability + Operations</option>
+                            <option value="Engineering / Operations">Engineering / Operations</option>
+                            <option value="Estate Operations">Estate Operations</option>
+                            <option value="Estate Managers + Sustainability / Agriculture">Estate Managers + Sustainability / Agriculture</option>
+                            <option value="HR / OHS + Estate Management">HR / OHS + Estate Management</option>
+                            <option value="HR">HR</option>
+                            <option value="Procurement">Procurement</option>
+                            <option value="Company Secretariat / Compliance / Internal Audit">Company Secretariat / Compliance</option>
+                            <option value="CEO / CFO / Strategy">CEO / CFO / Strategy</option>
+                            <option value="Sustainability / HR / Community Development">Sustainability / HR / Community Dev</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-outline btn-sm" id="resetKpiFiltersBtn">
+                        <i data-lucide="rotate-ccw"></i>
+                        <span>Reset</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- KPI Cards Grid -->
+            <div class="kpi-grid" id="kpiCardsContainer">
+                <!-- Rendered dynamically via JS -->
+            </div>
+        </section>
+
+        <!-- ==================== TAB 3: 5-YEAR TRENDS & CHARTS ==================== -->
+        <section id="tab-analytics" class="tab-content">
+            <div class="section-header">
+                <div>
+                    <h3 class="section-title">5-Year Historical Performance Analytics (FY 2021/22 – FY 2025/26)</h3>
+                    <p class="section-subtitle">Multi-dimensional trend visualization and internal historical benchmarking against company baseline</p>
+                </div>
+                <div class="chart-controls">
+                    <div class="btn-group" id="chartViewToggle">
+                        <button class="btn-pill active" data-view="all">Multi-Chart Dashboard</button>
+                        <button class="btn-pill" data-view="compare">Interactive Comparator</button>
+                        <button class="btn-pill" data-view="simulator">Target Simulator</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Standard Charts View -->
+            <div id="analyticsDashboardView" class="charts-view-container">
+                <div class="charts-grid">
+                    <!-- Chart 1: GHG Emissions & Carbon Footprint -->
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <div>
+                                <h4 class="card-title"><i data-lucide="cloud-rain"></i> Total GHG Emissions / Carbon Footprint</h4>
+                                <p class="card-subtitle">Scope 1 & 2 Absolute Emissions (tCO2e) | SDG 13 Climate Action</p>
+                            </div>
+                            <span class="badge badge-warning">FY25/26 Rebound: 8,013 tCO2e</span>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="ghgChart"></canvas>
+                        </div>
+                        <div class="chart-note">
+                            <i data-lucide="info"></i>
+                            <span>5-year change is -1.7% vs FY22 base (8,151), but reversed the FY25 record low of 6,817 tCO2e. Management must establish Scope 1+2 intensity.</span>
+                        </div>
+                    </div>
+
+                    <!-- Chart 2: Energy Consumption & Intensity -->
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <div>
+                                <h4 class="card-title"><i data-lucide="zap"></i> Energy Consumption & Energy Intensity</h4>
+                                <p class="card-subtitle">Absolute Energy (GJ) vs Output Intensity (GJ/MT) | SDG 7</p>
+                            </div>
+                            <span class="badge badge-primary">Intensity: 6.39 GJ/MT</span>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="energyChart"></canvas>
+                        </div>
+                        <div class="chart-note">
+                            <i data-lucide="info"></i>
+                            <span>Energy intensity improved by -10.9% compared to FY23 base (7.17), but rose from FY25 low of 5.65 GJ/MT. Absolute energy rose to 203,570 GJ.</span>
+                        </div>
+                    </div>
+
+                    <!-- Chart 3: Rainwater Contribution & Water Resilience -->
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <div>
+                                <h4 class="card-title"><i data-lucide="droplets"></i> Rainwater Contribution & Reliance (%)</h4>
+                                <p class="card-subtitle">Operational Water Demand Met via Rainwater | SDG 6</p>
+                            </div>
+                            <span class="badge badge-warning">Current: 59.0%</span>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="waterChart"></canvas>
+                        </div>
+                        <div class="chart-note">
+                            <i data-lucide="info"></i>
+                            <span>Long-term improvement from 49% baseline (+10pp), but sharp drop from the FY25 peak of 82%. Requires investigation into rainfall capture vs freshwater intensity.</span>
+                        </div>
+                    </div>
+
+                    <!-- Chart 4: Occupational Safety & Injury Pathway -->
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <div>
+                                <h4 class="card-title"><i data-lucide="activity"></i> Occupational Safety Zero-Harm Pathway</h4>
+                                <p class="card-subtitle">Recordable Injuries & Lost Hours | SDG 8 Decent Work</p>
+                            </div>
+                            <span class="badge badge-success">-42.1% Injuries | -57.3% Lost Hours</span>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="safetyChart"></canvas>
+                        </div>
+                        <div class="chart-note">
+                            <i data-lucide="info"></i>
+                            <span>Recordable injuries fell from 121 in FY25 to 70 in FY26. Zero fatalities across all 5 years. Target ceiling is &lt;30 incidents.</span>
+                        </div>
+                    </div>
+
+                    <!-- Chart 5: Training & Capability Building -->
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <div>
+                                <h4 class="card-title"><i data-lucide="graduation-cap"></i> Training Hours & Investment</h4>
+                                <p class="card-subtitle">Avg Training Hours/Employee vs Training Investment (Rs. Mn) | SDG 4</p>
+                            </div>
+                            <span class="badge badge-success">19.0 hrs/emp (84,850 total)</span>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="trainingChart"></canvas>
+                        </div>
+                        <div class="chart-note">
+                            <i data-lucide="info"></i>
+                            <span>Tremendous capability acceleration from 1.5 hrs/emp (Rs. 6.5 Mn) in FY22 to 19.0 hrs/emp (Rs. 19 Mn) in FY26. Next step: productivity outcome links.</span>
+                        </div>
+                    </div>
+
+                    <!-- Chart 6: Workforce Retention & Gender Representation -->
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <div>
+                                <h4 class="card-title"><i data-lucide="user-check"></i> Employee Retention & Female Representation</h4>
+                                <p class="card-subtitle">Workforce Retention % & Gender Diversity (%) | SDG 5 & SDG 8</p>
+                            </div>
+                            <span class="badge badge-secondary">Retention: 82% | Female: 49%</span>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="workforceChart"></canvas>
+                        </div>
+                        <div class="chart-note">
+                            <i data-lucide="info"></i>
+                            <span>Retention rebounded from 79% (FY25) to 82%, but is 7pp below baseline (89%). Female representation stabilized at 49% (needs senior management breakdown).</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comprehensive 5-Year Data Table -->
+                <div class="card mt-24">
+                    <div class="card-header">
+                        <div>
+                            <h4 class="card-title"><i data-lucide="table"></i> Complete 5-Year Historical Sustainability KPI Master Table</h4>
+                            <p class="card-subtitle">Direct from Excel Workbook & Annual Reports (FY 2021/22 to FY 2025/26)</p>
+                        </div>
+                        <button class="btn btn-sm btn-outline" id="exportTableCsvBtn">
+                            <i data-lucide="file-spreadsheet"></i>
+                            <span>Download Full Table</span>
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table striped" id="historicalMasterTable">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>KPI Name</th>
+                                    <th>Unit</th>
+                                    <th>Direction</th>
+                                    <th>FY 2021/22</th>
+                                    <th>FY 2022/23</th>
+                                    <th>FY 2023/24</th>
+                                    <th>FY 2024/25</th>
+                                    <th>FY 2025/26</th>
+                                    <th>Primary SDG</th>
+                                    <th>Data & Governance Note</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historicalTableBody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Target Simulator View (Hidden by default) -->
+            <div id="analyticsSimulatorView" class="charts-view-container hidden">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h4 class="card-title"><i data-lucide="sliders"></i> 2030 Sustainability Target Pathway Simulator</h4>
+                            <p class="card-subtitle">Simulate future interventions and project their impact on 2030 SDG goals</p>
+                        </div>
+                    </div>
+                    <div class="simulator-grid">
+                        <div class="sim-controls">
+                            <div class="sim-control-item">
+                                <div class="sim-label-row">
+                                    <label>Renewable Energy Solar Share (%):</label>
+                                    <span id="simRenewableVal">35%</span>
+                                </div>
+                                <input type="range" id="simRenewableRange" min="10" max="80" value="35" class="range-slider">
+                                <small>Projected Scope 2 GHG displacement</small>
+                            </div>
+
+                            <div class="sim-control-item">
+                                <div class="sim-label-row">
+                                    <label>Rainwater Harvesting Expansion (%):</label>
+                                    <span id="simRainwaterVal">75%</span>
+                                </div>
+                                <input type="range" id="simRainwaterRange" min="50" max="95" value="75" class="range-slider">
+                                <small>Freshwater withdrawal reduction</small>
+                            </div>
+
+                            <div class="sim-control-item">
+                                <div class="sim-label-row">
+                                    <label>Safety Awareness Regional Sessions / Year:</label>
+                                    <span id="simSafetySessionsVal">4</span>
+                                </div>
+                                <input type="range" id="simSafetySessionsRange" min="1" max="8" value="4" class="range-slider">
+                                <small>Direct impact on recordable injuries ceiling (&lt;30)</small>
+                            </div>
+
+                            <div class="sim-control-item">
+                                <div class="sim-label-row">
+                                    <label>Bio-Fertiliser Substitution Rate (%):</label>
+                                    <span id="simBioFertVal">30%</span>
+                                </div>
+                                <input type="range" id="simBioFertRange" min="5" max="60" value="30" class="range-slider">
+                                <small>SDG 12 responsible consumption & soil organic carbon</small>
+                            </div>
+                        </div>
+
+                        <div class="sim-results">
+                            <h4>Projected 2030 Horizon Outcomes</h4>
+                            <div class="sim-outcome-cards">
+                                <div class="sim-outcome-card">
+                                    <span class="label">Projected GHG Emissions</span>
+                                    <strong id="simOutcomeGhg" class="val text-emerald">5,930 tCO2e</strong>
+                                    <span class="sub text-emerald"><i data-lucide="trending-down"></i> -26.0% vs FY26</span>
+                                </div>
+                                <div class="sim-outcome-card">
+                                    <span class="label">Projected Recordable Injuries</span>
+                                    <strong id="simOutcomeInjuries" class="val text-emerald">22 incidents</strong>
+                                    <span class="sub text-emerald"><i data-lucide="check-circle-2"></i> Meets &lt;30 Target</span>
+                                </div>
+                                <div class="sim-outcome-card">
+                                    <span class="label">Freshwater Displacement</span>
+                                    <strong id="simOutcomeWater" class="val text-emerald">+38,400 m³</strong>
+                                    <span class="sub text-emerald">Enhanced resilience</span>
+                                </div>
+                                <div class="sim-outcome-card">
+                                    <span class="label">Chemical Fertilizer Cut</span>
+                                    <strong id="simOutcomeFert" class="val text-emerald">-30.0%</strong>
+                                    <span class="sub text-emerald">Lower input intensity</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 4: CONSULTANT SDG TARGETS ==================== -->
+        <section id="tab-sdg-targets" class="tab-content">
+            <div class="section-header">
+                <div>
+                    <h3 class="section-title">Sustainability Consultant SDG Target Register</h3>
+                    <p class="section-subtitle">10 specific programme-level priorities across 5 SDGs with dated milestones, review frequencies and execution status</p>
+                </div>
+                <div class="filter-toolbar">
+                    <div class="filter-group">
+                        <label for="targetSdgFilter">Filter by SDG:</label>
+                        <select id="targetSdgFilter">
+                            <option value="ALL">All SDGs (5)</option>
+                            <option value="SDG 2">SDG 2 - Zero Hunger (2)</option>
+                            <option value="SDG 3">SDG 3 - Good Health (2)</option>
+                            <option value="SDG 4">SDG 4 - Quality Education (2)</option>
+                            <option value="SDG 8">SDG 8 - Decent Work (2)</option>
+                            <option value="SDG 12">SDG 12 - Responsible Consumption (2)</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="targetStatusFilter">Status:</label>
+                        <select id="targetStatusFilter">
+                            <option value="ALL">All Statuses</option>
+                            <option value="Planned">Planned (8)</option>
+                            <option value="In Progress">In Progress (2)</option>
+                            <option value="Achieved">Achieved</option>
+                            <option value="At Risk">At Risk</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Target Cards Grid -->
+            <div class="targets-grid" id="targetsContainer">
+                <!-- Rendered dynamically via JS -->
+            </div>
+        </section>
+
+        <!-- ==================== TAB 5: SDG ALIGNMENT MATRIX ==================== -->
+        <section id="tab-sdg-matrix" class="tab-content">
+            <div class="section-header">
+                <div>
+                    <h3 class="section-title">United Nations SDG Alignment & Materiality Matrix</h3>
+                    <p class="section-subtitle">Mapping company measurement to 10 Primary UN Sustainable Development Goals (Sections 2.3 & 19)</p>
+                </div>
+                <div class="matrix-summary-pills">
+                    <span class="pill-badge"><strong>10</strong> Primary SDGs Mapped</span>
+                    <span class="pill-badge"><strong>20</strong> Board Framework KPIs</span>
+                    <span class="pill-badge"><strong>10</strong> Consultant Targets</span>
+                </div>
+            </div>
+
+            <div class="sdg-cards-grid" id="sdgMatrixContainer">
+                <!-- Rendered dynamically via JS -->
+            </div>
+        </section>
+
+        <!-- ==================== TAB 6: PDCA & ACTION LOG ==================== -->
+        <section id="tab-pdca" class="tab-content">
+            <div class="section-header">
+                <div>
+                    <h3 class="section-title">PDCA Closed-Loop Management & Corrective Action Log</h3>
+                    <p class="section-subtitle">Plan-Do-Check-Act discipline for investigating variances, adverse trends, and At Risk targets (Sections 20 & 39)</p>
+                </div>
+                <button class="btn btn-primary btn-sm" id="addNewActionBtn">
+                    <i data-lucide="plus-circle"></i>
+                    <span>Log New Corrective Action</span>
+                </button>
+            </div>
+
+            <!-- PDCA Visual Flow Banner -->
+            <div class="pdca-flow-card">
+                <div class="pdca-step step-plan">
+                    <div class="step-num">1. PLAN</div>
+                    <div class="step-title">Confirm & Set</div>
+                    <p>Approve material issues, KPI definitions, baselines, targets & named executive owners.</p>
+                </div>
+                <div class="flow-divider"><i data-lucide="arrow-right"></i></div>
+                <div class="pdca-step step-do">
+                    <div class="step-num">2. DO</div>
+                    <div class="step-title">Implement & Collect</div>
+                    <p>Execute plantation & community programmes; capture standardized data in registry.</p>
+                </div>
+                <div class="flow-divider"><i data-lucide="arrow-right"></i></div>
+                <div class="pdca-step step-check">
+                    <div class="step-num">3. CHECK</div>
+                    <div class="step-title">Review & Escalate</div>
+                    <p>Review 5-year trends, variance vs baseline, evaluate data quality & flag At Risk KPIs.</p>
+                </div>
+                <div class="flow-divider"><i data-lucide="arrow-right"></i></div>
+                <div class="pdca-step step-act">
+                    <div class="step-num">4. ACT</div>
+                    <div class="step-title">Root Cause & Rectify</div>
+                    <p>Conduct root cause analysis, allocate budget, assign completion dates & track to closure.</p>
+                </div>
+            </div>
+
+            <!-- Active Corrective Actions Table -->
+            <div class="card mt-24">
+                <div class="card-header">
+                    <div>
+                        <h4 class="card-title"><i data-lucide="alert-triangle"></i> Active Board Corrective Action Register (Adverse Trends & Key Gaps)</h4>
+                        <p class="card-subtitle">Pre-populated from Report Assessments with interactive status updates</p>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table action-table">
+                        <thead>
+                            <tr>
+                                <th>Ref #</th>
+                                <th>Adverse Trend / Trigger</th>
+                                <th>Root Cause Analysis</th>
+                                <th>Corrective Action Plan</th>
+                                <th>Executive Owner</th>
+                                <th>Budget</th>
+                                <th>Due Date</th>
+                                <th>Board Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="correctiveActionsBody">
+                            <!-- Rendered dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 7: DATA GOVERNANCE & DICTIONARY ==================== -->
+        <section id="tab-governance" class="tab-content">
+            <div class="section-header">
+                <div>
+                    <h3 class="section-title">ESG Data Governance Model & Data Dictionary</h3>
+                    <p class="section-subtitle">Controlled measurement standards, calculation formulas, and data quality boundary notes (Sections 26 & 27)</p>
+                </div>
+                <div class="search-box table-search">
+                    <i data-lucide="search" class="search-icon"></i>
+                    <input type="text" id="dictSearch" placeholder="Filter dictionary by KPI, formula or source...">
+                </div>
+            </div>
+
+            <!-- Governance Rules Summary Cards -->
+            <div class="gov-rules-grid">
+                <div class="gov-rule-card">
+                    <div class="rule-icon"><i data-lucide="ban"></i></div>
+                    <div>
+                        <strong>No Unsupported Targets</strong>
+                        <p>Do not invent future numerical milestones where baselines are not yet scientifically established. Mark as TBE.</p>
+                    </div>
+                </div>
+                <div class="gov-rule-card">
+                    <div class="rule-icon"><i data-lucide="git-branch"></i></div>
+                    <div>
+                        <strong>Boundary Consistency</strong>
+                        <p>Local supplier spending series experienced boundary shift after FY23. Do not treat full series as identical without disclosure.</p>
+                    </div>
+                </div>
+                <div class="gov-rule-card">
+                    <div class="rule-icon"><i data-lucide="repeat"></i></div>
+                    <div>
+                        <strong>Input vs Outcome Pairing</strong>
+                        <p>Community investment (Rs. Mn) must always be paired with outcome impact verification, not standalone spending.</p>
+                    </div>
+                </div>
+                <div class="gov-rule-card">
+                    <div class="rule-icon"><i data-lucide="user-check"></i></div>
+                    <div>
+                        <strong>Single Executive Accountability</strong>
+                        <p>Every operational KPI must have one named primary business owner accountable for investigation & corrective action.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Dictionary Table -->
+            <div class="card mt-24">
+                <div class="card-header">
+                    <div>
+                        <h4 class="card-title"><i data-lucide="book-open"></i> Formal ESG Data Dictionary</h4>
+                        <p class="card-subtitle">Definitions, units, denominators, calculation methods, sources, and assurance readiness</p>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table striped" id="dictionaryTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>KPI Name</th>
+                                <th>Dimension</th>
+                                <th>Unit / Denominator</th>
+                                <th>Calculation Method / Formula</th>
+                                <th>Data Source</th>
+                                <th>Assurance Status</th>
+                                <th>Governance Caveat</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dictionaryTableBody">
+                            <!-- Rendered dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 8: 5-YEAR ROADMAP & RECOMMENDATIONS ==================== -->
+        <section id="tab-roadmap" class="tab-content">
+            <div class="section-header">
+                <div>
+                    <h3 class="section-title">5-Year Strategic Implementation Roadmap (FY 2026/27 – FY 2030/31)</h3>
+                    <p class="section-subtitle">Structured phased execution plan for EPP Board of Directors (Sections 28–38)</p>
+                </div>
+            </div>
+
+            <!-- Phased Roadmap Timeline -->
+            <div class="roadmap-timeline">
+                <!-- Year 1 -->
+                <div class="roadmap-year-card">
+                    <div class="year-badge">YEAR 1 &bull; FY 2026/27</div>
+                    <div class="year-header">
+                        <h4>Standardise & Establish Baselines</h4>
+                        <span class="badge badge-primary">Foundation Phase</span>
+                    </div>
+                    <ul class="year-deliverables">
+                        <li><i data-lucide="check-circle-2"></i> Confirm formal definitions for all 20 Board KPIs and document ESG data governance rules.</li>
+                        <li><i data-lucide="check-circle-2"></i> Maintain Madakumbura elderly home as operational SDG 3 milestone.</li>
+                        <li><i data-lucide="check-circle-2"></i> Implement quarterly region-wise PPE & safety-wear awareness sessions.</li>
+                        <li><i data-lucide="check-circle-2"></i> Establish missing baselines for Scope 3, renewable ratio, freshwater intensity, waste diversion, senior female %, voluntary turnover, Board reviews, ethics SLAs, and community outcomes.</li>
+                        <li><i data-lucide="check-circle-2"></i> Create baseline measures for SDG 4 school targets and SDG 12 land/bio-fertiliser targets.</li>
+                    </ul>
+                </div>
+
+                <!-- Year 2 -->
+                <div class="roadmap-year-card">
+                    <div class="year-badge">YEAR 2 &bull; FY 2027/28</div>
+                    <div class="year-header">
+                        <h4>Deliver 2028 Milestones</h4>
+                        <span class="badge badge-accent">Execution Phase</span>
+                    </div>
+                    <ul class="year-deliverables">
+                        <li><i data-lucide="check-circle-2"></i> Achieve low-country zero-hunger milestone by 2028 (Target T01).</li>
+                        <li><i data-lucide="check-circle-2"></i> Commence construction/launch of 2nd elderly home at Dunsinane (Target T04).</li>
+                        <li><i data-lucide="check-circle-2"></i> Scale vertical/hydroponic farming and bio-fertiliser programmes with initial yield tracking.</li>
+                        <li><i data-lucide="check-circle-2"></i> Drive injury-reduction pathway toward fewer than 30 incidents.</li>
+                        <li><i data-lucide="check-circle-2"></i> Introduce outcome reporting for Grade 1–5 school attendance and sanitary facility upgrades.</li>
+                    </ul>
+                </div>
+
+                <!-- Year 3 -->
+                <div class="roadmap-year-card">
+                    <div class="year-badge">YEAR 3 &bull; FY 2028/29</div>
+                    <div class="year-header">
+                        <h4>Embed Outcome Measurement</h4>
+                        <span class="badge badge-secondary">Optimization Phase</span>
+                    </div>
+                    <ul class="year-deliverables">
+                        <li><i data-lucide="check-circle-2"></i> Use at least two full years of standardized baseline data to set evidence-based numerical targets.</li>
+                        <li><i data-lucide="check-circle-2"></i> Integrate supplier ESG compliance percentages & corrective action SLAs into procurement contracts.</li>
+                        <li><i data-lucide="check-circle-2"></i> Strengthen community outcome measurement beyond expenditure & headcounts.</li>
+                        <li><i data-lucide="check-circle-2"></i> Review GHG, energy and water trends for multi-year structural efficiency gains.</li>
+                    </ul>
+                </div>
+
+                <!-- Year 4 -->
+                <div class="roadmap-year-card">
+                    <div class="year-badge">YEAR 4 &bull; FY 2029/30</div>
+                    <div class="year-header">
+                        <h4>Extend & Integrate</h4>
+                        <span class="badge badge-success">Integration Phase</span>
+                    </div>
+                    <ul class="year-deliverables">
+                        <li><i data-lucide="check-circle-2"></i> Extend zero-hunger programme toward up-country operations & group-wide reach.</li>
+                        <li><i data-lucide="check-circle-2"></i> Integrate Board sustainability review completion & ethics case SLA closure into core governance.</li>
+                        <li><i data-lucide="check-circle-2"></i> Link diversified/value-added revenue & innovation measures to executive performance incentives.</li>
+                        <li><i data-lucide="check-circle-2"></i> Maintain synchronized KPI definitions across annual report, Board packs and Power BI.</li>
+                    </ul>
+                </div>
+
+                <!-- Year 5 -->
+                <div class="roadmap-year-card">
+                    <div class="year-badge">YEAR 5 &bull; FY 2030/31</div>
+                    <div class="year-header">
+                        <h4>Sustain & Reset Target Cycle</h4>
+                        <span class="badge badge-emerald">Transformation Phase</span>
+                    </div>
+                    <ul class="year-deliverables">
+                        <li><i data-lucide="check-circle-2"></i> Maintain 2030 group-wide zero-hunger outcome sustainably.</li>
+                        <li><i data-lucide="check-circle-2"></i> Maintain recordable injuries below 30 incidents & zero fatalities/high-consequence injuries.</li>
+                        <li><i data-lucide="check-circle-2"></i> Demonstrate measurable progress in water, energy, waste diversion, supplier ESG & community.</li>
+                        <li><i data-lucide="check-circle-2"></i> Review 20-KPI framework and approve next 5-year cycle (2031–2036) based on proven evidence.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Top 10 Strategic Recommendations Accordion -->
+            <div class="card mt-24">
+                <div class="card-header">
+                    <div>
+                        <h4 class="card-title"><i data-lucide="list-checks"></i> 10 Core Strategic Recommendations (Part F)</h4>
+                        <p class="card-subtitle">Click each recommendation for full implementation rationale</p>
+                    </div>
+                </div>
+                <div class="recommendations-accordion" id="recommendationsContainer">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal for Detailed KPI Drilldown -->
+    <div class="modal-overlay hidden" id="kpiModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="modal-title-wrap">
+                    <span class="badge" id="modalDimensionBadge">Dimension</span>
+                    <h3 id="modalKpiTitle">KPI Title</h3>
+                    <p id="modalKpiSubtitle">Primary SDG & Relevant Target</p>
+                </div>
+                <button class="modal-close-btn" id="modalCloseBtn"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body" id="modalKpiBody">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Adding/Editing Corrective Action -->
+    <div class="modal-overlay hidden" id="actionModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="modal-title-wrap">
+                    <span class="badge badge-primary">PDCA Control Log</span>
+                    <h3 id="actionModalTitle">Log Corrective Action</h3>
+                    <p>Enter root cause investigation & management intervention</p>
+                </div>
+                <button class="modal-close-btn" id="actionModalCloseBtn"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="actionForm">
+                    <div class="form-group">
+                        <label>Adverse Trend / Triggering KPI:</label>
+                        <input type="text" id="actionFormKpi" required placeholder="e.g. FY25/26 GHG Rebound (+17.5%)">
+                    </div>
+                    <div class="form-group">
+                        <label>Root Cause Analysis:</label>
+                        <textarea id="actionFormRootCause" rows="3" required placeholder="Describe underlying driver (e.g. factory fuel mix, machinery idle time, weather)..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Corrective Action Plan:</label>
+                        <textarea id="actionFormPlan" rows="3" required placeholder="Specific management action, engineering fix, or policy enforcement..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Executive Owner:</label>
+                            <input type="text" id="actionFormOwner" required placeholder="e.g. Head of Sustainability + Operations">
+                        </div>
+                        <div class="form-group">
+                            <label>Budget Required:</label>
+                            <input type="text" id="actionFormBudget" placeholder="e.g. Rs. 4.5 Mn or Within OpEx">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Completion Date:</label>
+                            <input type="text" id="actionFormDate" placeholder="e.g. Q2 FY2026/27">
+                        </div>
+                        <div class="form-group">
+                            <label>Board Review Status:</label>
+                            <select id="actionFormStatus">
+                                <option value="In Progress">In Progress</option>
+                                <option value="Planned">Planned</option>
+                                <option value="Completed">Completed</option>
+                                <option value="At Risk">At Risk</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline" id="actionFormCancelBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Action</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Print Report View (Hidden in normal browser, rendered on Print) -->
+    <div id="printReportContainer" class="print-only"></div>
+
+    <!-- Application Script -->
+    <script src="app.js"></script>
+</body>
+</html>
